@@ -9,7 +9,7 @@ namespace lolwatcher2
 {
     class Program
     {
-        static List<string> LOCALES = new List<string>{
+        static readonly List<string> LOCALES = new List<string>{
             "cs_CZ",
             "el_GR",
             "pl_PL",
