@@ -42,28 +42,23 @@ namespace lolwatcher2
 
         static void Main(string[] args)
         {
-            string lang;
-            int counter = 0;
+            string lang = "";
 
             if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
             {
 
-                Console.WriteLine("Enter target language:");
-                LOCALES.ForEach(l => Console.WriteLine(counter++ + " " + l));
-
-                lang = Console.ReadLine();
-
-                while (string.IsNullOrWhiteSpace(lang) || LOCALES.Where(l => l == lang).Any())
+                while (string.IsNullOrWhiteSpace(lang) || !LOCALES.Where(l => l == lang).Any())
                 {
+                    int counter = 0;
                     Console.WriteLine("Enter target language:");
-                    LOCALES.ForEach(l => Console.WriteLine(counter++ + " " + l));
+                    LOCALES.ForEach(l => Console.WriteLine(++counter + ". " + l));
 
                     lang = Console.ReadLine();
 
                     int i;
-                    if (int.TryParse(lang, out i))
+                    if (int.TryParse(lang, out i) && i <= LOCALES.Count)
                     {
-                        lang = LOCALES[i];
+                        lang = LOCALES[i - 1];
                     }
                 }
             }
@@ -71,7 +66,8 @@ namespace lolwatcher2
             {
                 lang = args[0];
             }
-
+            Console.Clear();
+            Console.WriteLine("Locale: " + lang);
             Console.WriteLine("Language changer active.");
 
             while (true)
@@ -93,10 +89,11 @@ namespace lolwatcher2
 
                 if (cmd.Contains(lang))
                 {
+                    Thread.Sleep(5000);
                     continue;
                 }
 
-                LOCALES.ForEach(l => cmd.Replace(l, lang));
+                LOCALES.ForEach(l => cmd = cmd.Replace("-Locale=" + l, "-Locale=" + lang));
 
                 ProcessStartInfo lol = new ProcessStartInfo(
                     cmd
